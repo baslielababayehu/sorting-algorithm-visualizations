@@ -1,17 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "./Canvas.css";
 import {
   getBubbleSortAnimations,
   getQuickSortAnimations,
+  getInsertionSortAnimations,
+  getSelectionSortAnimations,
 } from "../algorithm/Sort.js";
-import ContinuousSlider, { SecondCustomizedSlider } from "../canvas/Slider";
+
 import Menu from "../layout/Menu";
-
-// Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 5;
-
-// Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 310;
+import SpeedSlider, { ElementsSlider } from "./Slider";
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = "blueviolet";
@@ -23,7 +20,9 @@ export class Canvas extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sortIsRunning: false,
+      sortIsRunning: 0,
+      noOfElementsIsChanged: 0,
+
       array: [],
       animationSpeed: 5,
       numberOfArrayBars: 50,
@@ -32,9 +31,6 @@ export class Canvas extends Component {
   componentDidMount() {
     this.createNewArray();
   }
-  // componentDidUpdate() {
-  //   this.addElementsToArray();
-  // }
 
   createNewArray = (maxValue, minValue) => {
     maxValue = 566;
@@ -47,6 +43,7 @@ export class Canvas extends Component {
       // console.log(array);
     }
     this.setState({ array });
+    this.setState({ noOfElementsIsChanged: 0 });
   };
   findSelectedAlgorithm = () => {
     let selectedValue = parseInt(
@@ -67,14 +64,15 @@ export class Canvas extends Component {
         this.insertionSort();
         break;
       case 4:
-        this.heapSort();
+        this.selectionSort();
         break;
       default:
         break;
     }
   };
 
-  bubbleSort = () => {
+  bubbleSort = async () => {
+    await this.setState({ sortIsRunning: 1 });
     const animations = getBubbleSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
@@ -87,23 +85,30 @@ export class Canvas extends Component {
         const barTwoStyle = arrayBars[barTwoIdx].style;
 
         const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-        setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
-        }, (i * 40) / this.state.animationSpeed);
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            resolve();
+          }, 1 / (20 * this.state.animationSpeed));
+        });
       } else {
-        setTimeout(() => {
-          const barOneStyle = arrayBars[barOneIdx].style;
-          const barTwoStyle = arrayBars[barTwoIdx].style;
-          barOneStyle.height = `${barOneHeight / 10}vw`;
-          barTwoStyle.height = `${barTwoHeight / 10}vw`;
-        }, (i * 40) / this.state.animationSpeed);
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            barOneStyle.height = `${barOneHeight / 10}vw`;
+            barTwoStyle.height = `${barTwoHeight / 10}vw`;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
       }
     }
+    this.setState({ sortIsRunning: 0 });
   };
-
-  quickSort = () => {
-    const animations = getQuickSortAnimations(this.state.array);
+  quickSort = async () => {
+    await this.setState({ sortIsRunning: 1 });
+    const animations = getBubbleSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -115,28 +120,107 @@ export class Canvas extends Component {
         const barTwoStyle = arrayBars[barTwoIdx].style;
 
         const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-        setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
       } else {
-        setTimeout(() => {
-          const barOneStyle = arrayBars[barOneIdx].style;
-          const barTwoStyle = arrayBars[barTwoIdx].style;
-          barOneStyle.height = `${barOneHeight / 10}vw`;
-          barTwoStyle.height = `${barTwoHeight / 10}vw`;
-        }, i * ANIMATION_SPEED_MS);
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            barOneStyle.height = `${barOneHeight / 10}vw`;
+            barTwoStyle.height = `${barTwoHeight / 10}vw`;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
       }
     }
+    this.setState({ sortIsRunning: 0 });
+  };
+  insertionSort = async () => {
+    await this.setState({ sortIsRunning: 1 });
+    const animations = getInsertionSortAnimations(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      const isColorChange = i % 3 !== 2;
+
+      const [barOneIdx, barTwoIdx, barOneHeight, barTwoHeight] = animations[i];
+
+      if (isColorChange) {
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+
+        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
+      } else {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            barOneStyle.height = `${barOneHeight / 10}vw`;
+            barTwoStyle.height = `${barTwoHeight / 10}vw`;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
+      }
+    }
+    this.setState({ sortIsRunning: 0 });
   };
 
-  updateValue = (e, data) => {
-    this.setState({ animationSpeed: data });
+  selectionSort = async () => {
+    await this.setState({ sortIsRunning: 1 });
+    const animations = getSelectionSortAnimations(this.state.array);
+    for (let i = 0; i < animations.length; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      const isColorChange = i % 3 !== 2;
+
+      const [barOneIdx, barTwoIdx, barOneHeight, barTwoHeight] = animations[i];
+
+      if (isColorChange) {
+        const barOneStyle = arrayBars[barOneIdx].style;
+        const barTwoStyle = arrayBars[barTwoIdx].style;
+
+        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
+      } else {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            barOneStyle.height = `${barOneHeight / 10}vw`;
+            barTwoStyle.height = `${barTwoHeight / 10}vw`;
+            resolve();
+          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+        });
+      }
+    }
+    this.setState({ sortIsRunning: 0 });
+  };
+
+  updateValue = async (e, data) => {
+    await this.setState({ animationSpeed: data });
     console.log(this.state.animationSpeed);
   };
 
-  updateElements = (e, data) => {
-    this.setState({ numberOfArrayBars: data });
+  updateElements = async (e, data) => {
+    await this.setState({ numberOfArrayBars: data });
+    await this.setState({ noOfElementsIsChanged: 1 });
     console.log(this.state.numberOfArrayBars);
   };
 
@@ -157,45 +241,74 @@ export class Canvas extends Component {
               justifyContent: "center",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-end",
-              }}
-            >
-              <button
-                className="btn btn-sm btn-dark mr-2 mb-2"
-                onClick={this.createNewArray}
-              >
-                <i className="fa fa-repeat text-white"></i>
-              </button>
-            </div>
-            <Menu />
+            {this.state.sortIsRunning === 1 ? null : (
+              <Fragment>
+                {this.state.noOfElementsIsChanged === 1 ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <button
+                      className="btn btn-sm btn-danger mr-2 mb-2"
+                      onClick={this.createNewArray}
+                    >
+                      <i className="fa fa-repeat text-white"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <Fragment>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <button
+                        className="btn btn-sm btn-dark mr-2 mb-2"
+                        onClick={this.createNewArray}
+                      >
+                        <i className="fa fa-repeat text-white"></i>
+                      </button>
+                    </div>
+                    <Menu />
 
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-end",
-              }}
-            >
-              <button
-                className="btn btn-sm btn-dark mr-2 mb-2"
-                onClick={this.findSelectedAlgorithm}
-              >
-                Sort!
-              </button>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <button
+                        className="btn btn-sm btn-dark mr-2 mb-2"
+                        onClick={this.findSelectedAlgorithm}
+                      >
+                        Sort!
+                      </button>
+                    </div>
+                  </Fragment>
+                )}
+              </Fragment>
+            )}
+          </div>
+          {this.state.sortIsRunning === 1 ? (
+            <div className="col-12 mt-2">
+              Sort Speed <SpeedSlider disabled={true} />
+              Number of Elements
+              <ElementsSlider disabled={true} />
             </div>
-          </div>
-
-          <div className="col-12 mt-2">
-            Sort Speed{" "}
-            <ContinuousSlider updateValue={this.updateValue.bind(this)} />
-            Number of Elements
-            <SecondCustomizedSlider
-              updateElements={this.updateElements.bind(this)}
-              numberOfArrayBars={this.state.numberOfArrayBars}
-            />
-          </div>
+          ) : (
+            <div className="col-12 mt-2">
+              Sort Speed{" "}
+              <SpeedSlider updateValue={this.updateValue.bind(this)} />
+              Number of Elements
+              <ElementsSlider
+                updateElements={this.updateElements.bind(this)}
+                numberOfArrayBars={this.state.numberOfArrayBars}
+              />
+            </div>
+          )}
         </div>
 
         <div className="m-2 border p-2">
@@ -206,7 +319,7 @@ export class Canvas extends Component {
               style={{
                 margin: "1px",
                 height: `${value / 10}vw`,
-                width: `${20 / this.state.numberOfArrayBars}vw`,
+                width: `${25 / Math.pow(this.state.numberOfArrayBars, 0.85)}vw`,
                 display: "inline-block",
               }}
             ></div>
@@ -214,13 +327,6 @@ export class Canvas extends Component {
         </div>
       </div>
     );
-  }
-}
-
-function arraysAreEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false;
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] === arr2[i]) return true;
   }
 }
 

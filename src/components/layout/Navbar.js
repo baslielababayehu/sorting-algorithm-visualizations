@@ -9,7 +9,7 @@ const Navbarcustom = () => {
           className="text-decoration-none bg-dark rounded-0 text-light"
           href="#"
         >
-          <i class="fa fa-pencil"></i>
+          <i className="fa fa-pencil"></i>
           &nbsp; Sort Algorithm Visualizer
         </a>
       </span>

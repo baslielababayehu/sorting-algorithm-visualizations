@@ -69,3 +69,38 @@ export function getQuickSortAnimations(array = []) {
   console.log(array);
   return animations;
 }
+
+export function getInsertionSortAnimations(array = []) {
+  const animations = [];
+  for (let i = 0; i < array.length; i++) {
+    let j = i;
+    while (j > 0 && array[j] < array[j - 1]) {
+      swap(j, j - 1, array);
+      animations.push([j, j - 1, array[j], array[j - 1]]);
+      animations.push([j, j - 1, array[j], array[j - 1]]);
+      animations.push([j, j - 1, array[j], array[j - 1]]);
+
+      j -= 1;
+    }
+  }
+  return animations;
+}
+
+export function getSelectionSortAnimations(array = []) {
+  const animations = [];
+  let current = 0;
+  while (current < array.length - 1) {
+    let min = current;
+    for (let i = current + 1; i < array.length; i++) {
+      if (array[min] > array[i]) min = i;
+    }
+    if (current < min) {
+      swap(current, min, array);
+      animations.push([current, min, array[current], array[min]]);
+      animations.push([current, min, array[current], array[min]]);
+      animations.push([current, min, array[current], array[min]]);
+    }
+    current++;
+  }
+  return animations;
+}

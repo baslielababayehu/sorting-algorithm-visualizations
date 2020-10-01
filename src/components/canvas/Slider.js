@@ -60,7 +60,7 @@ const PrettoSlider = withStyles({
   },
 })(Slider);
 
-export default function CustomizedSlider(props) {
+export default function SpeedSlider(props) {
   const classes = useStyles();
 
   return (
@@ -70,23 +70,26 @@ export default function CustomizedSlider(props) {
         aria-label="pretto slider"
         defaultValue={30}
         onChange={props.updateValue}
+        disabled={props.disabled}
       />
       <div className={classes.margin} />
     </div>
   );
 }
 
-export function SecondCustomizedSlider(props) {
+export function ElementsSlider(props) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <PrettoSlider
         valueLabelDisplay="auto"
-        // max={50}
+        max={100}
+        min={25}
         aria-label="pretto slider"
-        defaultValue={props.numberOfArrayBars}
+        defaultValue={50}
         onChange={props.updateElements}
+        disabled={props.disabled}
       />
       <div className={classes.margin} />
     </div>
