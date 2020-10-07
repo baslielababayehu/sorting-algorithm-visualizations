@@ -67,8 +67,9 @@ export default function SpeedSlider(props) {
     <div className={classes.root}>
       <PrettoSlider
         valueLabelDisplay="auto"
+        min={1}
         aria-label="pretto slider"
-        defaultValue={30}
+        defaultValue={0}
         onChange={props.updateValue}
         disabled={props.disabled}
       />
@@ -87,7 +88,7 @@ export function ElementsSlider(props) {
         max={100}
         min={25}
         aria-label="pretto slider"
-        defaultValue={50}
+        defaultValue={0}
         onChange={props.updateElements}
         disabled={props.disabled}
       />

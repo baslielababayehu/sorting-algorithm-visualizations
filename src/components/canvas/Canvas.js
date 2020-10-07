@@ -66,8 +66,8 @@ export class Canvas extends Component {
       case 4:
         this.selectionSort();
         break;
-      default:
-        break;
+      // default:
+      //   break;
     }
   };
 
@@ -90,7 +90,7 @@ export class Canvas extends Component {
             barOneStyle.backgroundColor = color;
             barTwoStyle.backgroundColor = color;
             resolve();
-          }, 1 / (20 * this.state.animationSpeed));
+          }, 1 / (10 * this.state.animationSpeed));
         });
       } else {
         await new Promise((resolve) => {
@@ -100,7 +100,7 @@ export class Canvas extends Component {
             barOneStyle.height = `${barOneHeight / 10}vw`;
             barTwoStyle.height = `${barTwoHeight / 10}vw`;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 1 / (30 * this.state.animationSpeed));
         });
       }
     }
@@ -108,7 +108,7 @@ export class Canvas extends Component {
   };
   quickSort = async () => {
     await this.setState({ sortIsRunning: 1 });
-    const animations = getBubbleSortAnimations(this.state.array);
+    const animations = getQuickSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -125,7 +125,7 @@ export class Canvas extends Component {
             barOneStyle.backgroundColor = color;
             barTwoStyle.backgroundColor = color;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 30 / (0.2 * this.state.animationSpeed));
         });
       } else {
         await new Promise((resolve) => {
@@ -135,7 +135,7 @@ export class Canvas extends Component {
             barOneStyle.height = `${barOneHeight / 10}vw`;
             barTwoStyle.height = `${barTwoHeight / 10}vw`;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 30 / (0.2 * this.state.animationSpeed));
         });
       }
     }
@@ -160,7 +160,7 @@ export class Canvas extends Component {
             barOneStyle.backgroundColor = color;
             barTwoStyle.backgroundColor = color;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 30 / (0.2 * this.state.animationSpeed));
         });
       } else {
         await new Promise((resolve) => {
@@ -170,7 +170,7 @@ export class Canvas extends Component {
             barOneStyle.height = `${barOneHeight / 10}vw`;
             barTwoStyle.height = `${barTwoHeight / 10}vw`;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 30 / (0.2 * this.state.animationSpeed));
         });
       }
     }
@@ -196,7 +196,7 @@ export class Canvas extends Component {
             barOneStyle.backgroundColor = color;
             barTwoStyle.backgroundColor = color;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 30 / (0.2 * this.state.animationSpeed));
         });
       } else {
         await new Promise((resolve) => {
@@ -206,7 +206,7 @@ export class Canvas extends Component {
             barOneStyle.height = `${barOneHeight / 10}vw`;
             barTwoStyle.height = `${barTwoHeight / 10}vw`;
             resolve();
-          }, 1 / (20 * Math.pow(this.state.animationSpeed, 1.9)));
+          }, 30 / (0.2 * this.state.animationSpeed));
         });
       }
     }
@@ -318,7 +318,7 @@ export class Canvas extends Component {
               key={idx}
               style={{
                 margin: "1px",
-                height: `${value / 10}vw`,
+                height: `${value / 8}vh`,
                 width: `${25 / Math.pow(this.state.numberOfArrayBars, 0.85)}vw`,
                 display: "inline-block",
               }}
